@@ -1,65 +1,3 @@
-/****************************************************************************/
-/* 																			*/
-/* 			Statystyczna Analiza Danych z pakietem SAS		 				*/
-/* 																			*/
-/* 						WNE UW 2021/22										*/
-/* 																			*/
-/* 					dr hab. Piotr Wjcik									*/
-/* 																			*/
-/****************************************************************************/
-/*				Z A D A N I A    Z A L I C Z E N I O W E 					*/
-/****************************************************************************/
-
-/* !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! */
-/* PRZED przystpieniem do rozwizywania zada prosz zapozna si
-	z obowizujcymi zasadami (plik "SAD_zasady202122.pdf"). */
-/* !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! */
-
-/* Rozwizania zada zaliczeniowych naley przesa mailem na adres 
-   pwojcik@wne.uw.edu.pl najpniej do piatku 28.01.2021 r. do pnocy.
-
-Za kady rozpoczty dzie spnienia bdzie naliczane 10 punktw ujemnych.
-
-Maksymalnie za rozwizanie zada zaliczeniowych mona zdoby 64 punktw.
-Za prace domowe maksymalnie mona uzyska 35 punktw.
-
-Skala ocen bdzie uwzgldniaa wyniki caej grupy, ale aby uzyska 
-zaliczenie zaj naley w sumie uzyska co najmniej 60 punktw.
-
-POWODZENIA !!!	*/
-
-
-/******************************************************************/
-
-/* Zrodlo danych: Diagnoza spoeczna (http://www.diagnoza.com/)
-Diagnoza spoeczna to cykliczne badanie przeprowadzane przez zesp
-prof. Czapiskiego na duej prbie respondentw. 
-	Wszystkie analizy beda wykonywane na wynikach badania
-	przeprowadzonego w roku 2015.
-
-Zbir zosta przygotowany tak, e obejmuje tylko WYBRANE zmienne
-z badania w roku 2015 + kilka dodatkowych zmiennych oglnych
-	
-Plik z danymi:
----------------
-dane_diagnoza2015.sas7bdat - dane do badania
-dane_diagnoza2015_formaty.csv - plik z zapisanymi formatami dla zmiennych
-
-
-Pliki dodatkowe:
----------------
-- zmienne_diagnoza2015.pdf - zawiera informacje o zmiennych w zbiorze (nazwa, format, etykieta)
-- kwestionariusze_2015.pdf - kwestionariusz z DS 2015 - wybrane zmienne dotycz
-   czci indywidualnej badania, ktra zaczyna si od strony 20. kwestionariusza.
-
-UWAGA! nazwy zmiennych z roku 2015 zaczynaj si literami hp i zawieraj numer pytania,
-np. zmienne o przedrostku hp2_ zawieraj odpowiedzi na kolejne podpunkty z pytania 2 
-(patrz s. 22 pliku z kwestionariuszem), a zmienna hp34 zawiera odpowied na pytanie 34
-(patrz s. 24 pliku z kwestionariuszem), itd.
-
-
-*/
-
 
 /* ----------------------------------------------------------------- */
 /* Zadanie 0 - rozgrzewka :) */
@@ -145,7 +83,7 @@ run;
 proc print data = wojewodztwa_4;
 run;
 
-/*Dolnoœl¹skie -2, Lubelskie -6, Œl¹skie - 24, Zachodnopomorskie - 32 */
+/*DolnoÅ›lÄ…skie -2, Lubelskie -6, ÅšlÄ…skie - 24, Zachodnopomorskie - 32 */
 /* Check na numerach */
 proc sql;
 create table xyz as
@@ -181,8 +119,8 @@ where hp39 > 0 and hp43 = 2;
 ods select KruskalWallisTest;
 run;
 
-/* p-value - 0.0012, zatem odrzucam H0, ¿e liczba osób zaliczanych do grona swoich przyjació³ 
-    przez niepal¹cych mê¿czyzn jest w ka¿dym z 4 losowo wybranych województw taka sama */
+/* p-value - 0.0012, zatem odrzucam H0, Å¼e liczba osÃ³b zaliczanych do grona swoich przyjaciÃ³Å‚ 
+    przez niepalÄ…cych mÄ™Å¼czyzn jest w kaÅ¼dym z 4 losowo wybranych wojewÃ³dztw taka sama */
 
 
 /* ----------------------------------------------------------------- */
@@ -294,8 +232,8 @@ id wojid;
 block kobiety_zad_2 / levels=4
 coutline=black shape=cylinder;
 title1 'Mapa dla Polski'; 
-title2 ' Udzia³ kobiet które nie uprawiaj¹ aktywnie ¿adnej formy sportu czy
-    æwiczeñ fizycznych';
+title2 ' UdziaÅ‚ kobiet ktÃ³re nie uprawiajÄ… aktywnie Å¼adnej formy sportu czy
+    Ä‡wiczeÅ„ fizycznych';
 run; quit;
 
 
@@ -323,7 +261,7 @@ proc factor data = proba
 	var HP57_01 - HP57_20;
 run;
 
-/* Wstepne oszacowanie wskazuje na 7 czynników (wartoœci w³asne > 1) */
+/* Wstepne oszacowanie wskazuje na 7 czynnikÃ³w (wartoÅ›ci wÅ‚asne > 1) */
 
 ods output OrthRotFactPat=proba_czynniki7;
 
@@ -332,17 +270,17 @@ proc factor data=proba n=7 method=principal
 	var HP57_01 - HP57_20;
 run;
 
-/* usuwam ³adunki mniejsze ni¿ 0.5 co do wartoœci bezwzglêdnej jako nieistotne */
+/* usuwam Å‚adunki mniejsze niÅ¼ 0.5 co do wartoÅ›ci bezwzglÄ™dnej jako nieistotne */
 
 data proba_czynniki7;
 set proba_czynniki7;
 
-    /* tworzê tablicê ze zmiennymi */
+    /* tworzÄ™ tablicÄ™ ze zmiennymi */
 	array zmienne(7) factor1-factor7;
 
-	/* dziêki temu mo¿emy siê odwo³ywaæ do poszczególnych 
-	   zmiennych w pêtli jako do kolejnych elementów tablicy,
-	   co u³atwia wykonanie tej samej operacji na du¿ej 
+	/* dziÄ™ki temu moÅ¼emy siÄ™ odwoÅ‚ywaÄ‡ do poszczegÃ³lnych 
+	   zmiennych w pÄ™tli jako do kolejnych elementÃ³w tablicy,
+	   co uÅ‚atwia wykonanie tej samej operacji na duÅ¼ej 
 	   grupie zmiennych */
 
 	do i=1 to 7;
@@ -353,7 +291,7 @@ set proba_czynniki7;
 	drop i;
 run;
 
-/* zapisujê 7 czynników do zbioru */
+/* zapisujÄ™ 7 czynnikÃ³w do zbioru */
 
 proc factor data = proba
 			method = principal 
@@ -364,30 +302,30 @@ proc factor data = proba
 	var HP57_01 - HP57_20;
 run;
 
-/* podstawowe statystyki opisowe czynników */
+/* podstawowe statystyki opisowe czynnikÃ³w */
 
 proc means data = proba_factors;
 	var factor1-factor7;
 run;
 
-/* standaryzujê uzyskane czynniki do przedzia³u [0,1],
-	bo ³atwiej je wtedy porównywaæ miêdzy sob¹ */
+/* standaryzujÄ™ uzyskane czynniki do przedziaÅ‚u [0,1],
+	bo Å‚atwiej je wtedy porÃ³wnywaÄ‡ miÄ™dzy sobÄ… */
 
 proc stdize data=proba_factors out=proba_factors 
             method=range;
 	var factor1-factor7;
 run;
 
-/* nadajê nazwy poszczególnym czynnikom */
+/* nadajÄ™ nazwy poszczegÃ³lnym czynnikom */
 
 data proba_factors;
 set proba_factors;
-	label factor1='F1. Przywi¹zanie do wartoœci materialnych';
-	label factor2='F2. Niedocenianie niektórych ludzi';
-	label factor3='F3. Pozytywne nastawienie do ¿ycia';
+	label factor1='F1. PrzywiÄ…zanie do wartoÅ›ci materialnych';
+	label factor2='F2. Niedocenianie niektÃ³rych ludzi';
+	label factor3='F3. Pozytywne nastawienie do Å¼ycia';
 	label factor4='F4. Konsumpcjonizm';
-	label factor5='F5. Legalizacja zwi¹zków partnerskich';
-	label factor6='F6. Przywrócenie kary œmierci';
+	label factor5='F5. Legalizacja zwiÄ…zkÃ³w partnerskich';
+	label factor6='F6. PrzywrÃ³cenie kary Å›mierci';
 	label factor7='F7. Patriotyzm';
 run;
 
@@ -423,13 +361,13 @@ run;
             inputs = factor1-factor7);
 
 
-/* Niestety ze wzglêdu na ujemne statystyki CCC nie widac do konca poprawnego rozwiazania, dodatkowo cie¿ko doszukac sie maksymalnej wartosci dla obu statystyk (wylaczajac 0 skupien)
-/* Chcielibyœmy aby CCC oraz pseudo-F byly jak najwyzsze ( i dodatnie), natomiast w tym przypadku liczba podzialu bylaby rowna 0 */
-/* Dlatego wiêc, wezmê 3 skupienia, poniewa¿ wydaje mi siê, i¿ w tym miejscu wystêpuje pewne za³amanie siê oby dwu wartoœci */
+/* Niestety ze wzglÄ™du na ujemne statystyki CCC nie widac do konca poprawnego rozwiazania, dodatkowo cieÅ¼ko doszukac sie maksymalnej wartosci dla obu statystyk (wylaczajac 0 skupien)
+/* ChcielibyÅ›my aby CCC oraz pseudo-F byly jak najwyzsze ( i dodatnie), natomiast w tym przypadku liczba podzialu bylaby rowna 0 */
+/* Dlatego wiÄ™c, wezmÄ™ 3 skupienia, poniewaÅ¼ wydaje mi siÄ™, iÅ¼ w tym miejscu wystÄ™puje pewne zaÅ‚amanie siÄ™ oby dwu wartoÅ›ci */
 /* Uznaje, ze NA TEN MOMENT jest to optymalna liczba grup */
 
 
-/* Niemniej pobawmy siê jeszcze chwile i wykluczmy ma³o ró¿nicuj¹ce segmenty, a nastêpnie ponownie sprawdzmy pseudo-F i CCC */
+/* Niemniej pobawmy siÄ™ jeszcze chwile i wykluczmy maÅ‚o rÃ³Å¼nicujÄ…ce segmenty, a nastÄ™pnie ponownie sprawdzmy pseudo-F i CCC */
 
 %sgplotsegk(data = dane.proba_factors, 
             nclus = 3, 
@@ -437,7 +375,7 @@ run;
                      factor5 factor6 factor7, 
 	        out = dane.proba_factors_cechy);
 
-/* Usune 2 factory, ze wzglêdu na najwy¿sze odchylenia - factor6 i factor7 */
+/* Usune 2 factory, ze wzglÄ™du na najwyÅ¼sze odchylenia - factor6 i factor7 */
 
 %sgplotCCCk(data = dane.proba_factors, 
             maxclus = 16, 
@@ -449,13 +387,13 @@ run;
             inputs = factor1-factor5, 
 	        out = dane.proba_factors_cleaned);
 
-/* Uda³o siê uzyskaæ trochê wiêcej za³amañ, natomiast CCC nadal ma ujemne wartoœci, co wskazuje na zró¿nicowanie pomiêdzy segmentami */
-/* Nie mniej jednak, dla 4 segmentów zauwa¿amy, i¿ zdecydowanie za³amanie. */
-/* Uznajmy wiêc, i¿ jest to poprawny wynik */
+/* UdaÅ‚o siÄ™ uzyskaÄ‡ trochÄ™ wiÄ™cej zaÅ‚amaÅ„, natomiast CCC nadal ma ujemne wartoÅ›ci, co wskazuje na zrÃ³Å¼nicowanie pomiÄ™dzy segmentami */
+/* Nie mniej jednak, dla 4 segmentÃ³w zauwaÅ¼amy, iÅ¼ zdecydowanie zaÅ‚amanie. */
+/* Uznajmy wiÄ™c, iÅ¼ jest to poprawny wynik */
 
 
-/* Do tej pory,wszystko robiliœmy losowo - sprawdzmy wiêc, co sie stanie, gdy wspomo¿emy siê hierarchiczn¹ metod¹ */
-/* Dzialam na bazowych clustrach tzn. nie uwzgledniam zmniejszonej liczby factorów */
+/* Do tej pory,wszystko robiliÅ›my losowo - sprawdzmy wiÄ™c, co sie stanie, gdy wspomoÅ¼emy siÄ™ hierarchicznÄ… metodÄ… */
+/* Dzialam na bazowych clustrach tzn. nie uwzgledniam zmniejszonej liczby factorÃ³w */
 
 %inc "kmeanssuph.sas";
 
@@ -465,7 +403,7 @@ run;
 		    inputs = factor1-factor5, 
             out = dane.proba_factors_hierar);
 
-/* Wydaje siê, i¿ CCC lekko wzros³o z poziomu oko³o -26 do -45 oraz Pseudo-F wzros³o z oko³o 1500 (?) do 1827 */
+/* Wydaje siÄ™, iÅ¼ CCC lekko wzrosÅ‚o z poziomu okoÅ‚o -26 do -45 oraz Pseudo-F wzrosÅ‚o z okoÅ‚o 1500 (?) do 1827 */
 
 /* Zapiszmy oba rozwiazania, ze wspomaganiem i bez*/
 
@@ -527,7 +465,7 @@ create table temp_klasa as
 ;quit;
 
 /* check dla zarobkow */
-/* w proc sql nie ma over partition by, wiêc */
+/* w proc sql nie ma over partition by, wiÄ™c */
 proc sql;
 create table temp_zarobki as
 	select clusterk4w, hp65, count(*) as liczba
@@ -622,7 +560,7 @@ output out=proba_4a_1
 q1 = wiek2015;
 run;
 
-/* przeciêtne pragnienie ¿ycia - HP40 */
+/* przeciÄ™tne pragnienie Å¼ycia - HP40 */
 
 proc means data=proba_no_null noprint;
 var HP40;
@@ -676,7 +614,7 @@ output out=proba_4a_5
 mean=tv;
 run;
 
-/* proporcja osob z wykszta³ceniem conajmniej œrednim */
+/* proporcja osob z wyksztaÅ‚ceniem conajmniej Å›rednim */
 
 proc freq data = proba_no_null;
 table eduk4_2015;
@@ -729,12 +667,12 @@ run;
 data proba4_factors;
 set proba_4a_factors;
 	label factor1='F1. Pierwszy kwartyl wieku respondenta';
-	label factor2='F2. Przeciêtne pragnienie do ¿ycia';
-	label factor3='F3. Mediana dochodu miesiêcznego netto';
-	label factor4='F4. Œredni indeks BMI';
-	label factor5='F5. Proporcja osób, które w minionym tygodniu ogl¹da³y telewizjê mniej ni¿ przez 2 godziny dziennie';
-	label factor6='F6. Proporcja osób z wyksztaceniem co najmniej œrednim';
-	label factor7='F7. odstêp miêdzykwartylowy dla liczby osób zaliczanych do przyjació³';
+	label factor2='F2. PrzeciÄ™tne pragnienie do Å¼ycia';
+	label factor3='F3. Mediana dochodu miesiÄ™cznego netto';
+	label factor4='F4. Åšredni indeks BMI';
+	label factor5='F5. Proporcja osÃ³b, ktÃ³re w minionym tygodniu oglÄ…daÅ‚y telewizjÄ™ mniej niÅ¼ przez 2 godziny dziennie';
+	label factor6='F6. Proporcja osÃ³b z wyksztaceniem co najmniej Å›rednim';
+	label factor7='F7. odstÄ™p miÄ™dzykwartylowy dla liczby osÃ³b zaliczanych do przyjaciÃ³Å‚';
 run;
 
 proc cluster data=proba4_factors outtree=proba4_treeF
@@ -750,7 +688,7 @@ proc tree data=proba4_treeF horizontal;
 run;
 
 
-/* Wed³ug mnie powinno byæ 2-6 segmentow */
+/* WedÅ‚ug mnie powinno byÄ‡ 2-6 segmentow */
 
 /* ----------------------------------------------------------------- */
 /* b. Wybierz optymalne rozwizanie.
@@ -762,13 +700,13 @@ run;
 %inc "sgplotCCCh.sas";
 %sgplotCCCh(tree=proba4_treeF, maxncl=16);
 
-/* chce podzielic na 9 segmentów */
+/* chce podzielic na 9 segmentÃ³w */
 %inc "sgplotsegh.sas";
 %sgplotsegh(tree=proba4_treeF, /* nazwa zbioru z dendrogramem */
-            nseg=9, /* liczba grup, na które chcemy podzieliæ
-			           obserwacje i porównaæ na wykresie */
-           /* lista zmiennych, których œrednie wartoœci
-			  w poszczególnych segmentach chcemy porównaæ.
+            nseg=9, /* liczba grup, na ktÃ³re chcemy podzieliÄ‡
+			           obserwacje i porÃ³wnaÄ‡ na wykresie */
+           /* lista zmiennych, ktÃ³rych Å›rednie wartoÅ›ci
+			  w poszczegÃ³lnych segmentach chcemy porÃ³wnaÄ‡.
 			UWAGA! nalezy wypisac liste wszystkich
               zmiennych (bez skrotowej skladni) */
             inputs=factor1 factor2 factor3 factor4
@@ -810,11 +748,11 @@ run;
 
 /* ----------------------------------------------------------------- */
 /* Zadanie 5 */
-/* a. Zweryfikuj hipoteze, ze rozk³ad pragnienia ¿ycia (w tych dniach)
-   dla osób, które nie by³y w minionym miesi¹cu:
+/* a. Zweryfikuj hipoteze, ze rozkÅ‚ad pragnienia Å¼ycia (w tych dniach)
+   dla osÃ³b, ktÃ³re nie byÅ‚y w minionym miesiÄ…cu:
    - w kinie, teatrze lub na koncercie, ani
    - na spotkaniu towarzyskim   
-	nie zalezy od klasy wielkoœci miejscowoœci zamieszkania */
+	nie zalezy od klasy wielkoÅ›ci miejscowoÅ›ci zamieszkania */
 /* 2.5 punktu */
 
 /* Sprawdzam normalnosc */
@@ -824,7 +762,7 @@ var HP40;
 histogram HP40 / normal;
 run;
 
-/* W obu przypadkach brak normalnoœci */
+/* W obu przypadkach brak normalnoÅ›ci */
 
 proc npar1way data=proba;
 var hp40;
@@ -835,8 +773,8 @@ run;
 
 
 /* ----------------------------------------------------------------- */
-/* b. Zweryfikuj hipoteze, ze czêstoœæ udzia³u w nabo¿eñstwach 
-      osób mieszkaj¹cych w najwiêkszych miastach nie zalezy od plci. */
+/* b. Zweryfikuj hipoteze, ze czÄ™stoÅ›Ä‡ udziaÅ‚u w naboÅ¼eÅ„stwach 
+      osÃ³b mieszkajÄ…cych w najwiÄ™kszych miastach nie zalezy od plci. */
 /* 2.5 punktu  */
 
 proc univariate data=proba;
@@ -851,14 +789,14 @@ where KLASA_MIEJSCOWOSCI = 1;
 ods select KruskalWallisTest;
 run;
 
-/* H0 : czêstoœæ udzia³u w nabo¿eñstwach osób w najwiêkszych miastach jest taka sama niezale¿nie od p³ci (nie zale¿y od p³ci)
+/* H0 : czÄ™stoÅ›Ä‡ udziaÅ‚u w naboÅ¼eÅ„stwach osÃ³b w najwiÄ™kszych miastach jest taka sama niezaleÅ¼nie od pÅ‚ci (nie zaleÅ¼y od pÅ‚ci)
 p-value = 0.001 < 0.05 -> odrzucam h0 */
 	
 
 /* ----------------------------------------------------------------- */
 /* c. Zweryfikuj hipoteze, ze srednie zadowolenie z pracy 
-   i ze swego wyksztalcenia dla osób, które przynajmniej 1 godzinê
-   tygodniowo poœwiêcaj¹ na czytanie prasy, s¹ sobie rowne */
+   i ze swego wyksztalcenia dla osÃ³b, ktÃ³re przynajmniej 1 godzinÄ™
+   tygodniowo poÅ›wiÄ™cajÄ… na czytanie prasy, sÄ… sobie rowne */
 /* 2.5 punktu */
 
 proc ttest data=proba h0=0;
@@ -869,10 +807,10 @@ run;
 /* odrzucam hipoteze 0 */
 
 /* ----------------------------------------------------------------- */
-/* d. Osobno dla kobiet i dla mê¿czyzn zweryfikuj hipoteze, ze 
-   taki sam procent osób uwa¿a, ¿e ogólnie rzecz bior¹c wiêkszoœci ludzi 
-   mo¿na ufaæ oraz, ¿e  demokracja ma przewagê nad wszelkimi innymi formami 
-   rz¹dów */
+/* d. Osobno dla kobiet i dla mÄ™Å¼czyzn zweryfikuj hipoteze, ze 
+   taki sam procent osÃ³b uwaÅ¼a, Å¼e ogÃ³lnie rzecz biorÄ…c wiÄ™kszoÅ›ci ludzi 
+   moÅ¼na ufaÄ‡ oraz, Å¼e  demokracja ma przewagÄ™ nad wszelkimi innymi formami 
+   rzÄ…dÃ³w */
 /* 2.5 punktu */
 
 proc sql;
@@ -894,8 +832,8 @@ proc freq data=zad5d_M;
 	tables UFAC*DEMO /agree;
 run;
 
-/* p-value <.0001 -> odrzucam h0, ze taki sam procent mezczyzn uwa¿a, ¿e ogólnie rzecz bior¹c wiêkszoœci ludzi 
-   mo¿na ufaæ oraz, ¿e  demokracja ma przewagê nad wszelkimi innymi formami rz¹dów */
+/* p-value <.0001 -> odrzucam h0, ze taki sam procent mezczyzn uwaÅ¼a, Å¼e ogÃ³lnie rzecz biorÄ…c wiÄ™kszoÅ›ci ludzi 
+   moÅ¼na ufaÄ‡ oraz, Å¼e  demokracja ma przewagÄ™ nad wszelkimi innymi formami rzÄ…dÃ³w */
 
 data zad5d_K;
 	set Proba2;
@@ -906,14 +844,14 @@ proc freq data=zad5d_K;
 	tables UFAC*DEMO /agree;
 run;
 
-/* p-value <.0001 -> odrzucam h0, ze taki sam procent kobiet uwa¿a, ¿e ogólnie rzecz bior¹c wiêkszoœci ludzi 
-   mo¿na ufaæ oraz, ¿e  demokracja ma przewagê nad wszelkimi innymi formami rz¹dów */
+/* p-value <.0001 -> odrzucam h0, ze taki sam procent kobiet uwaÅ¼a, Å¼e ogÃ³lnie rzecz biorÄ…c wiÄ™kszoÅ›ci ludzi 
+   moÅ¼na ufaÄ‡ oraz, Å¼e  demokracja ma przewagÄ™ nad wszelkimi innymi formami rzÄ…dÃ³w */
 
 
 /* ----------------------------------------------------------------- */
 /* e. Uzywajac stosownych testow statystycznych odpowiedz na pytanie, 
-    czy zadowolenie ze sposobu spêdzania wolnego czasu zale¿y od
-	statusu spo³eczno-zawodowego respondenta. */
+    czy zadowolenie ze sposobu spÄ™dzania wolnego czasu zaleÅ¼y od
+	statusu spoÅ‚eczno-zawodowego respondenta. */
 /* 2.5 punktu */
 
 proc univariate data =  proba;
@@ -929,12 +867,12 @@ class status9_2015;
 ods select KruskalWallisTest;
 run;
 
-/* H0: Zadowolenie ze sposobu spêdzania wolnego czasu nie zale¿y od statusu spo³eczno-zawodowego respondenta
+/* H0: Zadowolenie ze sposobu spÄ™dzania wolnego czasu nie zaleÅ¼y od statusu spoÅ‚eczno-zawodowego respondenta
 p-value <.0001 -> odrzucam H0 */
 
 /* ----------------------------------------------------------------- */
-/* f. Policz i podaj interpretacje miary/miar wspolzaleznosci oceny ca³ego swojego 
-    dotychczasowego ¿ycia i miesiecznego dochodu (na reke). */
+/* f. Policz i podaj interpretacje miary/miar wspolzaleznosci oceny caÅ‚ego swojego 
+    dotychczasowego Å¼ycia i miesiecznego dochodu (na reke). */
 /* 3 punkty */
 
 /* Sprawdzam normalnosc */
@@ -949,7 +887,7 @@ var HP3;
 histogram HP3/normal;
 run;
 
-/* obie zmienne nie s¹ z rozk³adu normalnego tak wiêc korelacja Spearmana (albo Kendall Tau) */
+/* obie zmienne nie sÄ… z rozkÅ‚adu normalnego tak wiÄ™c korelacja Spearmana (albo Kendall Tau) */
 
 proc corr data =  proba
 spearman;
@@ -959,10 +897,10 @@ run;
 /* Spearman wynosi -0.23952 */
 
 /* ----------------------------------------------------------------- */
-/* g. Narysuj i zinterpretuj wykres podstawowych parametrow rozk³adu 
+/* g. Narysuj i zinterpretuj wykres podstawowych parametrow rozkÅ‚adu 
 	liczby godzin korzystania z Internetu w ostatnim tygodniu
-	w zale¿noœci od grupy wiekowej.
-	Ogranicz siê do osob, które nigdy nie p³aci³y za treœci dostêpne 
+	w zaleÅ¼noÅ›ci od grupy wiekowej.
+	Ogranicz siÄ™ do osob, ktÃ³re nigdy nie pÅ‚aciÅ‚y za treÅ›ci dostÄ™pne 
     w Internecie */
 /* 4 punkty */
 
